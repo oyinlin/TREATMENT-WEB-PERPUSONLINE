@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form Peminjaman - Bacain Aja</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>📚 Bacain Aja</h1>
+            <p class="tagline">#PerpusGaulAntiRibet</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-bar">
+            <input type="checkbox" id="menu-check">
+            <label for="menu-check" class="menu-btn">☰</label>
+            <ul class="menu">
+                <li><a href="index.html">🏠 Beranda</a></li>
+                <li><a href="form.html" class="active">📝 Form Peminjaman</a></li>
+                <li><a href="data.html">📊 Data Peminjaman</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="wrapper">
+            <section class="form-section">
+                <h2>📝 Form Peminjaman Buku</h2>
+                <p class="form-subtitle">Isi data berikut untuk meminjam buku di perpustakaan Bacain Aja</p>
+
+                <div class="form-container">
+                    <form id="formPeminjaman">
+                        <div class="form-group">
+                            <label for="nama">Nama Lengkap <span class="required">*</span></label>
+                            <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nim">NIM <span class="required">*</span></label>
+                            <input type="text" id="nim" name="nim" placeholder="Masukkan NIM" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="layanan">Jenis Layanan <span class="required">*</span></label>
+                            <select id="layanan" name="layanan" required>
+                                <option value="">Pilih jenis layanan</option>
+                                <option value="Peminjaman Buku Fisik">Peminjaman Buku Fisik</option>
+                                <option value="Peminjaman E-Book">Peminjaman E-Book</option>
+                                <option value="Klub Baca">Klub Baca</option>
+                                <option value="Ruangan Baca">Ruangan Baca</option>
+                                <option value="Konsultasi Literasi">Konsultasi Literasi</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="judul_buku">Judul Buku <span class="required">*</span></label>
+                            <input type="text" id="judul_buku" name="judul_buku" placeholder="Masukkan judul buku" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tanggal_pinjam">Tanggal Peminjaman <span class="required">*</span></label>
+                            <input type="date" id="tanggal_pinjam" name="tanggal_pinjam" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="durasi">Durasi Peminjaman (Hari)</label>
+                            <input type="number" id="durasi" name="durasi" placeholder="7" min="1" max="30" value="7">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="keterangan">Keterangan</label>
+                            <textarea id="keterangan" name="keterangan" rows="3" placeholder="Catatan tambahan (opsional)"></textarea>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="tombol primary">📥 Simpan Data</button>
+                            <button type="reset" class="tombol secondary">🔄 Reset</button>
+                        </div>
+                    </form>
+
+                    <div id="notifikasi" class="notifikasi" style="display: none;"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <p><strong>📚 Bacain Aja</strong> — Perpus Masa Kini</p>
+                <p class="footer-tagline">Sistem Informasi Perpustakaan Digital</p>
+            </div>
+            <div>
+                <p>📱 IG: @bacain_aja</p>
+                <p>📧 bacain@library.com</p>
+            </div>
+            <div>
+                <p>© 2026 Bacain Aja</p>
+                <p>All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

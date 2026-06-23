@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Peminjaman - Bacain Aja</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <h1>📚 Bacain Aja</h1>
+            <p class="tagline">#PerpusGaulAntiRibet</p>
+        </div>
+    </header>
+
+    <nav>
+        <div class="nav-bar">
+            <input type="checkbox" id="menu-check">
+            <label for="menu-check" class="menu-btn">☰</label>
+            <ul class="menu">
+                <li><a href="index.html">🏠 Beranda</a></li>
+                <li><a href="form.html">📝 Form Peminjaman</a></li>
+                <li><a href="data.html" class="active">📊 Data Peminjaman</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="wrapper">
+            <section class="data-section">
+                <div class="data-header">
+                    <h2>📊 Data Peminjaman Buku</h2>
+                    <div class="data-actions">
+                        <button onclick="tambahDataDummy()" class="tombol secondary small">➕ Tambah Data Dummy</button>
+                        <button onclick="hapusSemuaData()" class="tombol danger small">🗑️ Hapus Semua</button>
+                    </div>
+                </div>
+                
+                <p class="data-subtitle">Total Data: <span id="totalData">0</span> peminjaman</p>
+
+                <div class="table-container">
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>NIM</th>
+                                <th>Jenis Layanan</th>
+                                <th>Judul Buku</th>
+                                <th>Tanggal Pinjam</th>
+                                <th>Durasi</th>
+                                <th>Keterangan</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr>
+                                <td colspan="9" class="empty-data">Belum ada data peminjaman. Silakan tambahkan data melalui form.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div>
+                <p><strong>📚 Bacain Aja</strong> — Perpus Masa Kini</p>
+                <p class="footer-tagline">Sistem Informasi Perpustakaan Digital</p>
+            </div>
+            <div>
+                <p>📱 IG: @bacain_aja</p>
+                <p>📧 bacain@library.com</p>
+            </div>
+            <div>
+                <p>© 2026 Bacain Aja</p>
+                <p>All Rights Reserved</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
