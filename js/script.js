@@ -2,9 +2,8 @@
 // DATA PEMINJAMAN
 // ========================================
 let dataPeminjaman = [];
-let editId = null; // ID yang sedang diedit
+let editId = null;
 
-// Load data dari localStorage
 function loadData() {
     const stored = localStorage.getItem('dataPeminjaman');
     if (stored) {
@@ -18,7 +17,6 @@ function loadData() {
     updateTotal();
 }
 
-// Simpan data ke localStorage
 function saveData() {
     localStorage.setItem('dataPeminjaman', JSON.stringify(dataPeminjaman));
     renderTable();
@@ -26,7 +24,7 @@ function saveData() {
 }
 
 // ========================================
-// FORM HANDLER
+// CEK EDIT DARI SESSION STORAGE
 // ========================================
 document.addEventListener('DOMContentLoaded', function() {
     // Set default tanggal hari ini
@@ -36,13 +34,56 @@ document.addEventListener('DOMContentLoaded', function() {
         tanggalInput.value = today;
     }
 
+    // CEK: Apakah ada data yang mau diedit dari sessionStorage?
+    const editIdFromSession = sessionStorage.getItem('editId');
+    if (editIdFromSession && window.location.pathname.includes('form.html')) {
+        const id = parseInt(editIdFromSession);
+        // Load data dulu dari localStorage
+        const stored = localStorage.getItem('dataPeminjaman');
+        if (stored) {
+            try {
+                dataPeminjaman = JSON.parse(stored);
+                const item = dataPeminjaman.find(data => data.id === id);
+                if (item) {
+                    editId = id;
+                    // Isi form dengan data
+                    document.getElementById('nama').value = item.nama;
+                    document.getElementById('nim').value = item.nim;
+                    document.getElementById('layanan').value = item.layanan;
+                    document.getElementById('judul_buku').value = item.judul_buku;
+                    document.getElementById('tanggal_pinjam').value = item.tanggal_pinjam;
+                    document.getElementById('durasi').value = item.durasi;
+                    document.getElementById('keterangan').value = item.keterangan === '-' ? '' : item.keterangan;
+                    
+                    // Ubah tombol submit
+                    const submitBtn = document.querySelector('.form-actions .tombol.primary');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '✏️ Update Data';
+                        submitBtn.className = 'tombol primary success';
+                    }
+                    
+                    // Ubah judul
+                    const formTitle = document.querySelector('.form-section h2');
+                    if (formTitle) {
+                        formTitle.innerHTML = '✏️ Edit Data Peminjaman';
+                    }
+                    
+                    showNotifikasi(`✏️ Sedang mengedit data: ${item.nama}`, 'info');
+                }
+            } catch (e) {
+                console.log('Error loading data:', e);
+            }
+        }
+        // Hapus sessionStorage setelah digunakan
+        sessionStorage.removeItem('editId');
+    }
+
     // Handle form submit
     const form = document.getElementById('formPeminjaman');
     if (form) {
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Ambil data dari form
             const nama = document.getElementById('nama').value.trim();
             const nim = document.getElementById('nim').value.trim();
             const layanan = document.getElementById('layanan').value;
@@ -51,42 +92,60 @@ document.addEventListener('DOMContentLoaded', function() {
             const durasi = document.getElementById('durasi').value || 7;
             const keterangan = document.getElementById('keterangan').value.trim();
 
-            // Validasi
             if (!nama || !nim || !layanan || !judul_buku || !tanggal_pinjam) {
                 showNotifikasi('⚠️ Semua field wajib (bertanda *) harus diisi!', 'error');
                 return;
             }
 
             // Cek apakah sedang edit atau tambah baru
-            if (editId) {
+            if (editId !== null && editId !== undefined) {
                 // Mode Edit - Update data yang ada
                 const index = dataPeminjaman.findIndex(item => item.id === editId);
                 if (index !== -1) {
                     dataPeminjaman[index] = {
-                        ...dataPeminjaman[index],
-                        nama,
-                        nim,
-                        layanan,
-                        judul_buku,
-                        tanggal_pinjam,
+                        id: editId,
+                        nama: nama,
+                        nim: nim,
+                        layanan: layanan,
+                        judul_buku: judul_buku,
+                        tanggal_pinjam: tanggal_pinjam,
                         durasi: parseInt(durasi),
                         keterangan: keterangan || '-'
                     };
                     saveData();
                     showNotifikasi('✅ Data berhasil diperbarui!', 'success');
                     editId = null;
-                    document.querySelector('.form-actions .tombol.primary').textContent = '📥 Simpan Data';
-                    document.querySelector('.form-actions .tombol.primary').classList.remove('success');
+                    
+                    // Reset tombol submit
+                    const submitBtn = document.querySelector('.form-actions .tombol.primary');
+                    if (submitBtn) {
+                        submitBtn.innerHTML = '📥 Simpan Data';
+                        submitBtn.className = 'tombol primary';
+                    }
+                    
+                    // Reset judul
+                    const formTitle = document.querySelector('.form-section h2');
+                    if (formTitle) {
+                        formTitle.innerHTML = '📝 Form Peminjaman Buku';
+                    }
+                    
+                    // Redirect ke data.html setelah 1.5 detik
+                    setTimeout(() => {
+                        window.location.href = 'data.html';
+                    }, 1500);
+                } else {
+                    showNotifikasi('⚠️ Data tidak ditemukan!', 'error');
+                    editId = null;
                 }
             } else {
                 // Mode Tambah Baru
                 const newData = {
                     id: Date.now(),
-                    nama,
-                    nim,
-                    layanan,
-                    judul_buku,
-                    tanggal_pinjam,
+                    nama: nama,
+                    nim: nim,
+                    layanan: layanan,
+                    judul_buku: judul_buku,
+                    tanggal_pinjam: tanggal_pinjam,
                     durasi: parseInt(durasi),
                     keterangan: keterangan || '-'
                 };
@@ -96,23 +155,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 showNotifikasi('✅ Data peminjaman berhasil disimpan!', 'success');
             }
             
-            form.reset();
-            document.getElementById('tanggal_pinjam').value = today;
-            
-            // Reset edit mode
-            editId = null;
-            
-            // Scroll ke tabel jika di halaman data
-            if (window.location.pathname.includes('data.html')) {
-                document.querySelector('.data-section').scrollIntoView({ behavior: 'smooth' });
+            if (editId === null) {
+                form.reset();
+                document.getElementById('tanggal_pinjam').value = today;
             }
         });
 
-        // Reset form juga reset edit mode
+        // Reset form
         form.addEventListener('reset', function() {
             editId = null;
-            document.querySelector('.form-actions .tombol.primary').textContent = '📥 Simpan Data';
-            document.querySelector('.form-actions .tombol.primary').classList.remove('success');
+            const submitBtn = document.querySelector('.form-actions .tombol.primary');
+            if (submitBtn) {
+                submitBtn.innerHTML = '📥 Simpan Data';
+                submitBtn.className = 'tombol primary';
+            }
+            const formTitle = document.querySelector('.form-section h2');
+            if (formTitle) {
+                formTitle.innerHTML = '📝 Form Peminjaman Buku';
+            }
+            showNotifikasi('🔄 Form telah direset', 'info');
         });
     }
 
@@ -139,7 +200,6 @@ function renderTable() {
     }
 
     tbody.innerHTML = dataPeminjaman.map((item, index) => {
-        // Tentukan status badge
         let statusClass = 'active';
         let statusText = 'Aktif';
         const today = new Date();
@@ -159,7 +219,7 @@ function renderTable() {
                 <td>${index + 1}</td>
                 <td><strong>${escapeHtml(item.nama)}</strong></td>
                 <td>${escapeHtml(item.nim)}</td>
-                <td><span class="status-badge" style="background:rgba(44,95,45,0.1);padding:4px 12px;border-radius:20px;font-size:0.75rem;">${escapeHtml(item.layanan)}</span></td>
+                <td><span style="background:rgba(44,95,45,0.1);padding:4px 12px;border-radius:20px;font-size:0.75rem;display:inline-block;">${escapeHtml(item.layanan)}</span></td>
                 <td>${escapeHtml(item.judul_buku)}</td>
                 <td>${formatTanggal(item.tanggal_pinjam)}</td>
                 <td>${item.durasi} hari</td>
@@ -190,44 +250,30 @@ function updateTotal() {
 }
 
 // ========================================
-// FITUR CRUD LENGKAP
+// EDIT DATA - Auto Redirect ke Form
 // ========================================
-
-// --- EDIT DATA ---
 function editData(id) {
+    console.log('Edit data dengan ID:', id);
+    
+    // Cari data berdasarkan ID
     const item = dataPeminjaman.find(data => data.id === id);
     if (!item) {
         showNotifikasi('⚠️ Data tidak ditemukan!', 'error');
         return;
     }
 
-    // Set edit mode
-    editId = id;
+    console.log('Data yang diedit:', item);
+
+    // Simpan ID ke sessionStorage
+    sessionStorage.setItem('editId', id);
     
-    // Isi form dengan data yang akan diedit
-    const form = document.getElementById('formPeminjaman');
-    if (form) {
-        document.getElementById('nama').value = item.nama;
-        document.getElementById('nim').value = item.nim;
-        document.getElementById('layanan').value = item.layanan;
-        document.getElementById('judul_buku').value = item.judul_buku;
-        document.getElementById('tanggal_pinjam').value = item.tanggal_pinjam;
-        document.getElementById('durasi').value = item.durasi;
-        document.getElementById('keterangan').value = item.keterangan === '-' ? '' : item.keterangan;
-        
-        // Ubah tombol submit menjadi tombol update
-        const submitBtn = document.querySelector('.form-actions .tombol.primary');
-        submitBtn.textContent = '✏️ Update Data';
-        submitBtn.classList.add('success');
-        
-        // Scroll ke form
-        document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
-        
-        showNotifikasi(`✏️ Sedang mengedit data: ${item.nama}`, 'info');
-    }
+    // Redirect ke halaman form
+    window.location.href = 'form.html';
 }
 
-// --- HAPUS DATA ---
+// ========================================
+// HAPUS DATA
+// ========================================
 function hapusData(id) {
     if (confirm('Yakin ingin menghapus data peminjaman ini?')) {
         dataPeminjaman = dataPeminjaman.filter(item => item.id !== id);
@@ -236,7 +282,9 @@ function hapusData(id) {
     }
 }
 
-// --- HAPUS SEMUA DATA ---
+// ========================================
+// HAPUS SEMUA DATA
+// ========================================
 function hapusSemuaData() {
     if (dataPeminjaman.length === 0) {
         showNotifikasi('📭 Tidak ada data untuk dihapus.', 'error');
@@ -250,7 +298,9 @@ function hapusSemuaData() {
     }
 }
 
-// --- TAMBAH DATA DUMMY ---
+// ========================================
+// TAMBAH DATA DUMMY
+// ========================================
 function tambahDataDummy() {
     const dummyNames = ['Ahmad Fauzi', 'Siti Rahma', 'Budi Santoso', 'Dewi Lestari', 'Rizky Ramadhan'];
     const dummyBooks = ['Laskar Pelangi', 'Bumi Manusia', 'Sang Pemimpi', 'Perahu Kertas', 'Dilan: Dia adalah Dilanku'];
@@ -264,8 +314,8 @@ function tambahDataDummy() {
         return date.toISOString().split('T')[0];
     };
 
-    // Hapus data dummy sebelumnya (opsional, biar ga numpuk)
-    // dataPeminjaman = dataPeminjaman.filter(item => !item.keterangan.includes('Dummy'));
+    // Hapus data dummy sebelumnya
+    dataPeminjaman = dataPeminjaman.filter(item => !item.keterangan.includes('Dummy'));
 
     for (let i = 0; i < 5; i++) {
         const newData = {
@@ -296,7 +346,6 @@ function showNotifikasi(message, type = 'success') {
     notif.className = `notifikasi ${type}`;
     notif.style.display = 'block';
     
-    // Auto hide after 4 seconds
     clearTimeout(notif._timer);
     notif._timer = setTimeout(() => {
         notif.style.display = 'none';
@@ -307,6 +356,7 @@ function showNotifikasi(message, type = 'success') {
 // UTILITY
 // ========================================
 function escapeHtml(text) {
+    if (!text) return '';
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
@@ -314,10 +364,14 @@ function escapeHtml(text) {
 
 function formatTanggal(dateString) {
     if (!dateString) return '-';
-    const date = new Date(dateString + 'T00:00:00');
-    return date.toLocaleDateString('id-ID', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
+    try {
+        const date = new Date(dateString + 'T00:00:00');
+        return date.toLocaleDateString('id-ID', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+    } catch (e) {
+        return dateString;
+    }
 }
