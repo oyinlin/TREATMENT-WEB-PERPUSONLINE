@@ -1092,3 +1092,208 @@ footer::before {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gradient-primary);
 }
+
+/* ============================================================
+   RIWAYAT.CSS - Halaman Riwayat
+   ============================================================ */
+
+/* ============================
+   RIWAYAT HEADER
+   ============================ */
+.riwayat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+#btnHapusSemua {
+    background: #A93226;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.8rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#btnHapusSemua:hover {
+    background: #8B231B;
+    transform: scale(1.02);
+}
+
+/* ============================
+   TABEL RIWAYAT
+   ============================ */
+.tabel-wrapper {
+    overflow-x: auto;
+    margin-top: 1rem;
+    border-radius: 16px;
+    border: 1px solid #e9edf2;
+}
+
+.tabel-riwayat {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    min-width: 700px;
+}
+
+.tabel-riwayat thead {
+    background: #A93226;
+    color: white;
+}
+
+.tabel-riwayat thead th {
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-weight: 600;
+}
+
+.tabel-riwayat tbody tr {
+    border-bottom: 1px solid #e9edf2;
+}
+
+.tabel-riwayat tbody tr:hover {
+    background: #F8F6F5;
+}
+
+.tabel-riwayat tbody td {
+    padding: 0.7rem 1rem;
+}
+
+.tabel-riwayat .no-urut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #A93226;
+    color: white;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.tabel-riwayat .nama-pasien {
+    font-weight: 600;
+    color: #A93226;
+}
+
+.tabel-riwayat .badge-status {
+    background: #fdf2f0;
+    color: #A93226;
+    padding: 0.2rem 1rem;
+    border-radius: 50px;
+    font-size: 0.7rem;
+    font-weight: 700;
+}
+
+.tabel-riwayat .harga-text {
+    font-weight: 700;
+    color: #A93226;
+}
+
+/* ============================
+   TOMBOL AKSI
+   ============================ */
+.aksi-button {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+.aksi-button .btn-edit,
+.aksi-button .btn-hapus {
+    padding: 0.2rem 0.9rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.aksi-button .btn-edit {
+    background: #f59e0b;
+    color: white;
+}
+
+.aksi-button .btn-edit:hover {
+    background: #d97706;
+}
+
+.aksi-button .btn-hapus {
+    background: #A93226;
+    color: white;
+}
+
+.aksi-button .btn-hapus:hover {
+    background: #8B231B;
+}
+
+/* ============================
+   RIWAYAT KOSONG
+   ============================ */
+.riwayat-kosong {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: #F8F6F5;
+    border-radius: 16px;
+}
+
+.riwayat-kosong .icon-kosong {
+    font-size: 4rem;
+    margin-bottom: 0.8rem;
+}
+
+.riwayat-kosong p {
+    font-size: 1.05rem;
+    color: #64748b;
+    margin-bottom: 1.2rem;
+}
+
+.btn-ke-layanan {
+    display: inline-block;
+    background: #A93226;
+    color: white;
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(169, 50, 38, 0.2);
+}
+
+.btn-ke-layanan:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(169, 50, 38, 0.3);
+}
+
+/* ============================
+   RESPONSIVE RIWAYAT
+   ============================ */
+@media (max-width: 768px) {
+    .riwayat-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .tabel-riwayat {
+        font-size: 0.8rem;
+        min-width: 600px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tabel-riwayat {
+        font-size: 0.7rem;
+        min-width: 480px;
+    }
+    .tabel-riwayat thead th,
+    .tabel-riwayat tbody td {
+        padding: 0.4rem 0.5rem;
+    }
+}
