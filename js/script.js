@@ -375,3 +375,167 @@ function formatTanggal(dateString) {
         return dateString;
     }
 }
+/**
+ * ==================== RIWAYAT.JS - VERSI ERROR ====================
+ * File ini sengaja dibuat dengan ERROR LOGIKA (bukan typo).
+ * Semua sintaks benar, tapi fungsinya ga jalan!
+ * 
+ * Penulis: KlinikSehat Team
+ * Tanggal: 2026
+ * ================================================================
+ */
+
+// ============================================================
+// ERROR 1: Fungsi format tanggal pake variabel yang salah
+// ============================================================
+function formatTanggal(str) {
+    if (!str) return '';
+    const d = new Date(str + 'T00:00:00');
+    const bulan = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                   'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+    // ❌ ERROR: pake "d.getMonth" tanpa kurung, jadi ga jalan
+    return d.getDate() + ' ' + bulan[d.getMonth] + ' ' + d.getFullYear(); // ❌ ERROR!
+}
+
+// ============================================================
+// ERROR 2: Nama variabel bentrok (conflict)
+// ============================================================
+function isRiwayatPage() {
+    // ❌ ERROR: variable "riwayat" kebentrok sama nama fungsi
+    const riwayat = document.getElementById('kontenRiwayat');
+    return riwayat !== null;
+}
+
+// ============================================================
+// ERROR 3: Async/await ga sengaja kepake, padahal ga perlu
+// ============================================================
+async function tampilkanRiwayat() { // ❌ ERROR: async ga perlu
+    if (!isRiwayatPage()) return;
+    
+    // ❌ ERROR: pake await padahal ga ada promise
+    const riwayat = await localStorage.getItem('kliniksehat_riwayat'); // ❌ ERROR!
+    riwayat = riwayat ? JSON.parse(riwayat) : [];
+
+    const kontainer = document.getElementById('kontenRiwayat');
+    if (!kontainer) return;
+
+    if (riwayat.length === 0) {
+        kontainer.innerHTML = `
+            <div class="riwayat-kosong">
+                <div class="icon-kosong">📋</div>
+                <p>Belum ada janji temu. Yuk, buat janji di KlinikSehat!</p>
+                <a href="pesanan.html" class="btn-ke-layanan">Buat Janji Sekarang</a>
+            </div>
+        `;
+        const btnHapusSemua = document.getElementById('btnHapusSemua');
+        if (btnHapusSemua) btnHapusSemua.style.display = 'none';
+        return;
+    }
+
+    // ❌ ERROR: pake "var" tapi ga ada di scope yang benar
+    var html = `<p style="color:#64748b;margin-bottom:0.8rem;">Menampilkan ${riwayat.length} data janji temu</p>`;
+    html += `<div class="tabel-wrapper">`;
+    html += `<table class="tabel-riwayat">`;
+    html += `<thead>`;
+    html += `<tr>`;
+    html += `<th>No</th>`;
+    html += `<th>Nama Pasien</th>`;
+    html += `<th>Layanan</th>`;
+    html += `<th>Dokter</th>`;
+    html += `<th>Tanggal</th>`;
+    html += `<th>Waktu</th>`;
+    html += `<th>Harga</th>`;
+    html += `<th>Status</th>`;
+    html += `<th>Aksi</th>`;
+    html += `</tr>`;
+    html += `</thead>`;
+    html += `<tbody>`;
+
+    for (let i = 0; i < riwayat.length; i++) {
+        const item = riwayat[i];
+        const hargaStr = item.harga ? 'Rp ' + item.harga.toLocaleString('id-ID') : '-';
+
+        html += `<tr>`;
+        html += `<td><span class="no-urut">${i + 1}</span></td>`;
+        html += `<td class="nama-pasien">${item.nama}</td>`;
+        html += `<td>${item.layanan}</td>`;
+        html += `<td>${item.dokter || '-'}</td>`;
+        html += `<td>${formatTanggal(item.tanggal)}</td>`;
+        html += `<td>${item.waktu}</td>`;
+        html += `<td class="harga-text">${hargaStr}</td>`;
+        html += `<td><span class="badge-status">✅ ${item.status}</span></td>`;
+        html += `<td>`;
+        html += `<div class="aksi-button">`;
+        html += `<button class="btn-edit" data-id="${item.id}">✏️ Edit</button>`;
+        html += `<button class="btn-hapus" data-id="${item.id}">🗑️ Hapus</button>`;
+        html += `</div>`;
+        html += `</td>`;
+        html += `</tr>`;
+    }
+
+    html += `</tbody>`;
+    html += `</table>`;
+    html += `</div>`;
+    kontainer.innerHTML = html;
+}
+
+// ============================================================
+// ERROR 4: Fungsi edit malah manggil dirinya sendiri (rekursi tak berujung)
+// ============================================================
+function editPesanan(id) {
+    // ❌ ERROR: manggil dirinya sendiri tanpa kondisi berhenti
+    editPesanan(id); // ❌ ERROR! Stack overflow!
+}
+
+// ============================================================
+// ERROR 5: Hapus semua tapi malah nambah data
+// ============================================================
+function hapusSemua() {
+    if (confirm('⚠️ Yakin ingin menghapus SEMUA riwayat?')) {
+        // ❌ ERROR: malah set item, bukan remove
+        localStorage.setItem('kliniksehat_riwayat', JSON.stringify([])); // ❌ ERROR!
+        // ❌ ERROR: ga panggil tampilkanRiwayat()
+        alert('✅ Semua riwayat berhasil dihapus!');
+    }
+}
+
+// ============================================================
+// ERROR 6: Hapus per data malah hapus yang salah
+// ============================================================
+function hapusPesanan(id) {
+    if (!confirm('Yakin ingin menghapus janji ini?')) return;
+
+    let riwayat = localStorage.getItem('kliniksehat_riwayat');
+    riwayat = riwayat ? JSON.parse(riwayat) : [];
+
+    // ❌ ERROR: langsung hapus index pertama, bukan yang sesuai ID
+    riwayat.splice(0, 1); // ❌ ERROR!
+    localStorage.setItem('kliniksehat_riwayat', JSON.stringify(riwayat));
+    tampilkanRiwayat();
+    alert('✅ Janji berhasil dihapus!');
+}
+
+// ============================================================
+// ERROR 7: Tombol Hapus Semua ga ke-binding
+// ============================================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🏥 KlinikSehat - Riwayat siap');
+    
+    if (isRiwayatPage()) {
+        tampilkanRiwayat();
+
+        // ❌ ERROR: pake selector yang salah (class vs id)
+        const btnHapusSemua = document.querySelector('.btnHapusSemua'); // ❌ ERROR!
+        if (btnHapusSemua) {
+            btnHapusSemua.onclick = hapusSemua;
+        }
+
+        // ❌ ERROR: event listener di document.body tapi ga nge-check target
+        document.body.addEventListener('click', function(e) {
+            // ❌ ERROR: ga ada pengecekan target
+            const id = e.target.dataset.id;
+            // ❌ ERROR: ga ngecek tombol apa yang diklik
+            alert('Tombol diklik!'); // ❌ ERROR!
+        });
+    }
+});
