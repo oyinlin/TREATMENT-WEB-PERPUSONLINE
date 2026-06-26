@@ -1,0 +1,71 @@
+<!-- ============================================================
+     RIWAYAT.HTML - Halaman Riwayat Janji KlinikSehat
+     ============================================================
+     Menampilkan semua data janji yang sudah dibuat dalam bentuk tabel.
+     Fitur: Lihat data, Edit, Hapus per data, Hapus semua.
+     ============================================================ -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KlinikSehat - Riwayat Janji</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-container">
+            <div class="header-left">
+                <div class="header-icon">
+                    <svg viewBox="0 0 100 100" width="50" height="50">
+                        <rect x="35" y="10" width="30" height="80" rx="4" fill="white" />
+                        <rect x="10" y="35" width="80" height="30" rx="4" fill="white" />
+                    </svg>
+                </div>
+                <div class="header-text">
+                    <h1 class="animasi-tulisan">🏥 KlinikSehat</h1>
+                    <p class="animasi-tulisan-delay">Sistem Informasi Pelayanan Kesehatan</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== NAVIGASI ===== -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Beranda</a></li>
+            <li><a href="layanan.html">Layanan</a></li>
+            <li><a href="pesanan.html">Pesan Janji</a></li>
+            <li><a href="riwayat.html" class="active">Riwayat</a></li>
+        </ul>
+    </nav>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+
+        <section class="fade-in">
+            <!-- Header: Judul + Tombol Hapus Semua -->
+            <div class="riwayat-header">
+                <h2>📋 Riwayat Janji Temu</h2>
+                <button id="btnHapusSemua">🗑️ Hapus Semua</button>
+            </div>
+
+            <!-- Tempat data riwayat ditampilkan oleh JavaScript -->
+            <div id="kontenRiwayat"></div>
+        </section>
+
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <p>&copy; 2026 <span>KlinikSehat</span> - Sistem Informasi Pelayanan Kesehatan</p>
+        <p>Jl. Beringin No. 46 Psr V, Kota Medan| (061) 555-1284 | info@kliniksehat.id</p>
+    </footer>
+
+    <!-- ===== JAVASCRIPT ===== -->
+    <script src="js/script.js"></script>
+</body>
+</html>
